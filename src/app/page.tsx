@@ -125,13 +125,19 @@ export default function Home() {
           className="flex justify-center mb-4"
         >
           <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-blue-500 dark:border-blue-500">
-            <Image
-              src="/profile.webp"
-              alt="Profile"
-              fill
-              className="object-cover"
-              priority
-            />
+            <a
+              href="https://github.com/ogmer"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image
+                src="/profile.webp"
+                alt="Profile"
+                fill
+                className="object-cover cursor-pointer"
+                priority
+              />
+            </a>
           </div>
         </motion.div>
         <p className="text-lg text-gray-600 dark:text-gray-300">
