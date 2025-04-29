@@ -25,7 +25,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 flex items-center justify-center z-50">
+      <div className="fixed inset-0 flex items-end justify-center z-50 pb-40">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -34,11 +34,11 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
           onClick={onClose}
         />
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
           transition={{ type: "spring", duration: 0.3 }}
-          className="relative w-11/12 max-w-lg max-h-[90vh] bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden"
+          className="relative w-11/12 max-w-lg max-h-[80vh] bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           <button
@@ -59,12 +59,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
               />
             </svg>
           </button>
-          <div
-            className="p-6 overflow-y-auto"
-            style={{ maxHeight: "calc(90vh - 4rem)" }}
-          >
-            {children}
-          </div>
+          <div className="p-6 overflow-y-auto">{children}</div>
         </motion.div>
       </div>
     </AnimatePresence>
