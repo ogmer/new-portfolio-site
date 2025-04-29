@@ -1,103 +1,259 @@
+"use client";
+
+import { useState } from "react";
+import { motion } from "framer-motion";
+import Modal from "@/components/Modal";
+import { useTheme } from "@/context/ThemeContext";
 import Image from "next/image";
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+interface Project {
+  id: number;
+  title: string;
+  description: string;
+  details: string;
+  technologies: string[];
+}
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+const projects: Project[] = [
+  {
+    id: 1,
+    title: "Project 1",
+    description: "A modern web application built with React and Node.js",
+    details:
+      "This project is a full-stack web application that demonstrates modern web development practices. It includes features such as real-time updates, user authentication, and responsive design.",
+    technologies: ["React", "Node.js", "MongoDB", "Express"],
+  },
+  {
+    id: 2,
+    title: "Project 2",
+    description: "E-commerce platform with advanced features",
+    details:
+      "An e-commerce platform that includes product management, shopping cart functionality, payment processing, and order tracking. The platform is built with scalability in mind.",
+    technologies: ["Vue.js", "Python", "PostgreSQL", "Django"],
+  },
+  {
+    id: 3,
+    title: "Project 3",
+    description: "Mobile-first responsive website",
+    details:
+      "A responsive website that showcases modern design principles and mobile-first development. The site includes animations, interactive elements, and optimized performance.",
+    technologies: ["HTML5", "CSS3", "JavaScript", "Tailwind CSS"],
+  },
+];
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.3,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  },
+};
+
+export default function Home() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const { theme, toggleTheme } = useTheme();
+
+  const handleProjectClick = (project: Project) => {
+    setSelectedProject(project);
+    setIsModalOpen(true);
+  };
+
+  return (
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="container mx-auto px-4 py-8"
+    >
+      <motion.div variants={itemVariants} className="absolute top-4 right-4">
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+        >
+          {theme === "light" ? (
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+              />
+            </svg>
+          ) : (
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+              />
+            </svg>
+          )}
+        </button>
+      </motion.div>
+
+      <motion.div variants={itemVariants} className="text-center">
+        <h1 className="text-4xl font-bold mb-4">Welcome to Ogmer Portfolio</h1>
+        <motion.div
+          variants={itemVariants}
+          className="flex justify-center mb-4"
+        >
+          <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-blue-500 dark:border-blue-500">
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+              src="/profile.webp"
+              alt="Profile"
+              fill
+              className="object-cover"
+              priority
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          </div>
+        </motion.div>
+        <p className="text-lg text-gray-600 dark:text-gray-300">
+          I&apos;m a web developer passionate about creating beautiful and
+          functional websites.
+        </p>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => {
+            setSelectedProject(null);
+            setIsModalOpen(true);
+          }}
+          className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+        >
+          Learn More
+        </motion.button>
+      </motion.div>
+
+      <motion.div
+        variants={containerVariants}
+        className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
+        {projects.map((project) => (
+          <motion.div
+            key={project.id}
+            variants={itemVariants}
+            whileHover={{
+              scale: 1.05,
+              boxShadow: "0 10px 30px -10px rgba(0,0,0,0.2)",
+            }}
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 cursor-pointer"
+            onClick={() => handleProjectClick(project)}
           >
-            Read our docs
-          </a>
+            <h2 className="text-xl font-semibold mb-2">{project.title}</h2>
+            <p className="text-gray-600 dark:text-gray-300">
+              {project.description}
+            </p>
+          </motion.div>
+        ))}
+      </motion.div>
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <div className="prose dark:prose-invert max-w-none">
+          {selectedProject ? (
+            <>
+              <h2 className="text-2xl font-bold mb-4">
+                {selectedProject.title}
+              </h2>
+              <p className="mb-4">{selectedProject.details}</p>
+              <div className="mb-4">
+                <h3 className="font-semibold mb-2">Technologies Used:</h3>
+                <div className="flex flex-wrap gap-2">
+                  {selectedProject.technologies.map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 rounded-full text-sm"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <h2 className="text-2xl font-bold mb-4">About Me</h2>
+              <p className="mb-4">
+                I am a passionate web developer with experience in creating
+                modern and responsive websites. My skills include:
+              </p>
+              <ul className="list-disc pl-6 mb-4">
+                <li>Frontend Development (React, Vue.js)</li>
+                <li>Backend Development (Node.js, Python)</li>
+                <li>UI/UX Design</li>
+                <li>Responsive Web Design</li>
+              </ul>
+              <p className="mb-4">
+                I love creating beautiful and functional websites that provide
+                great user experiences.
+              </p>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                  <h3 className="font-semibold mb-2">Education</h3>
+                  <p>Bachelor of Computer Science</p>
+                  <p>University of Technology</p>
+                </div>
+                <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                  <h3 className="font-semibold mb-2">Experience</h3>
+                  <p>5+ years of web development</p>
+                  <p>3+ years of UI/UX design</p>
+                </div>
+              </div>
+              <div className="mt-4">
+                <h3 className="font-semibold mb-2">Contact</h3>
+                <p>Email: example@email.com</p>
+                <p>Phone: +1 234 567 890</p>
+                <div className="flex gap-4 mt-2">
+                  <a
+                    href="#"
+                    className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                  >
+                    LinkedIn
+                  </a>
+                  <a
+                    href="#"
+                    className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                  >
+                    GitHub
+                  </a>
+                  <a
+                    href="#"
+                    className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                  >
+                    Twitter
+                  </a>
+                </div>
+              </div>
+            </>
+          )}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </Modal>
+    </motion.div>
   );
 }
