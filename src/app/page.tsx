@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import Modal from "@/components/Modal";
 import { useTheme } from "@/context/ThemeContext";
@@ -47,19 +47,18 @@ const containerVariants = {
     opacity: 1,
     transition: {
       staggerChildren: 0.1,
-      delayChildren: 0.3,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
+  hidden: { opacity: 0, y: 20 },
   visible: {
-    y: 0,
     opacity: 1,
+    y: 0,
     transition: {
-      duration: 0.5,
-      ease: "easeOut",
+      type: "spring",
+      stiffness: 100,
     },
   },
 };
@@ -69,10 +68,15 @@ export default function Home() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const { theme, toggleTheme } = useTheme();
 
-  const handleProjectClick = (project: Project) => {
+  const handleProjectClick = useCallback((project: Project) => {
     setSelectedProject(project);
     setIsModalOpen(true);
-  };
+  }, []);
+
+  const handleModalClose = useCallback(() => {
+    setIsModalOpen(false);
+    setSelectedProject(null);
+  }, []);
 
   return (
     <motion.div
@@ -84,7 +88,12 @@ export default function Home() {
       <motion.div variants={itemVariants} className="absolute top-4 right-4">
         <button
           onClick={toggleTheme}
-          className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+          className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+          aria-label={
+            theme === "light"
+              ? "ダークモードに切り替え"
+              : "ライトモードに切り替え"
+          }
         >
           {theme === "light" ? (
             <svg
@@ -92,6 +101,7 @@ export default function Home() {
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 strokeLinecap="round"
@@ -106,6 +116,7 @@ export default function Home() {
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 strokeLinecap="round"
@@ -129,10 +140,12 @@ export default function Home() {
               href="https://github.com/ogmer"
               target="_blank"
               rel="noopener noreferrer"
+              className="block w-full h-full"
+              aria-label="GitHubプロフィールを開く"
             >
               <Image
                 src="/profile.webp"
-                alt="Profile"
+                alt="プロフィール画像"
                 fill
                 className="object-cover cursor-pointer"
                 priority
@@ -151,7 +164,8 @@ export default function Home() {
             setSelectedProject(null);
             setIsModalOpen(true);
           }}
-          className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+          className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+          aria-label="詳細情報を表示"
         >
           Learn More
         </motion.button>
@@ -169,8 +183,15 @@ export default function Home() {
               scale: 1.05,
               boxShadow: "0 10px 30px -10px rgba(0,0,0,0.2)",
             }}
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 cursor-pointer"
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
             onClick={() => handleProjectClick(project)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                handleProjectClick(project);
+              }
+            }}
           >
             <h2 className="text-xl font-semibold mb-2">{project.title}</h2>
             <p className="text-gray-600 dark:text-gray-300">
@@ -180,13 +201,14 @@ export default function Home() {
         ))}
       </motion.div>
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        title={selectedProject ? selectedProject.title : "About Me"}
+      >
         <div className="prose dark:prose-invert max-w-none">
           {selectedProject ? (
             <>
-              <h2 className="text-2xl font-bold mb-4">
-                {selectedProject.title}
-              </h2>
               <p className="mb-4">{selectedProject.details}</p>
               <div className="mb-4">
                 <h3 className="font-semibold mb-2">Technologies Used:</h3>
@@ -204,7 +226,6 @@ export default function Home() {
             </>
           ) : (
             <>
-              <h2 className="text-2xl font-bold mb-4">About Me</h2>
               <p className="mb-4">
                 I am a passionate web developer with experience in creating
                 modern and responsive websites. My skills include:
@@ -231,26 +252,29 @@ export default function Home() {
                   <p>3+ years of UI/UX design</p>
                 </div>
               </div>
-              <div className="mt-4">
+              <div className="mt-6">
                 <h3 className="font-semibold mb-2">Contact</h3>
                 <p>Email: example@email.com</p>
                 <p>Phone: +1 234 567 890</p>
                 <div className="flex gap-4 mt-2">
                   <a
                     href="#"
-                    className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                    className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                    aria-label="LinkedInプロフィールを開く"
                   >
                     LinkedIn
                   </a>
                   <a
                     href="#"
-                    className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                    className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                    aria-label="GitHubプロフィールを開く"
                   >
                     GitHub
                   </a>
                   <a
                     href="#"
-                    className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                    className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                    aria-label="Twitterプロフィールを開く"
                   >
                     Twitter
                   </a>
