@@ -5,26 +5,29 @@ Next.js で構築されたモダンなポートフォリオサイトです。
 ## 機能
 
 - ダークモード/ライトモードの切り替え
-- プロジェクト一覧の表示
 - プロジェクト詳細のモーダル表示
 - アニメーション効果（Framer Motion）
-- レスポンシブデザイン
 
 ## 技術スタック
 
 - Next.js
 - TypeScript
 - Tailwind CSS
-- Framer Motion
 
-## プロジェクト構造
+<br>
 
-```
-src/
-  ├── app/
-  │   └── page.tsx      # メインページ
-  ├── components/
-  │   └── Modal.tsx     # モーダルコンポーネント
-  └── context/
-      └── ThemeContext.tsx  # テーマ管理
-```
+# Ogmer's Portfolio
+
+A modern portfolio site built in Next.js.
+
+## Function
+
+- Switching between dark and light modes
+- Modal display of project details
+- Animation effects (Framer Motion)
+
+## Technology Stacks
+
+- Next.js
+- TypeScript
+- Tailwind CSS
