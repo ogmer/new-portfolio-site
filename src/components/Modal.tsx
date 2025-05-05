@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useCallback } from "react";
+import React from "react";
 
 interface ModalProps {
   isOpen: boolean;
@@ -10,15 +11,27 @@ interface ModalProps {
   title?: string;
 }
 
-export default function Modal({
-  isOpen,
-  onClose,
-  children,
-  title,
-}: ModalProps) {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
+  // Escapeキーで閉じる
   const handleEscape = useCallback(
     (event: KeyboardEvent) => {
       if (event.key === "Escape") {
+        onClose();
+      }
+    },
+    [onClose]
+  );
+
+  // 閉じるボタンのクリック
+  const handleCloseClick = useCallback(() => {
+    onClose();
+  }, [onClose]);
+
+  // 閉じるボタンのキーボード操作
+  const handleCloseKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLButtonElement>) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
         onClose();
       }
     },
@@ -72,7 +85,9 @@ export default function Modal({
               </h2>
             )}
             <button
-              onClick={onClose}
+              onClick={handleCloseClick}
+              onKeyDown={handleCloseKeyDown}
+              tabIndex={0}
               className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full"
               aria-label="モーダルを閉じる"
             >
@@ -96,4 +111,6 @@ export default function Modal({
       </div>
     </AnimatePresence>
   );
-}
+};
+
+export default Modal;

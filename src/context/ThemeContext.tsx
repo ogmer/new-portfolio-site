@@ -1,12 +1,13 @@
 "use client";
 
-import {
+import React, {
   createContext,
   useContext,
   useEffect,
   useState,
   useCallback,
   useMemo,
+  ReactNode,
 } from "react";
 
 type Theme = "light" | "dark";
@@ -16,45 +17,58 @@ interface ThemeContextType {
   toggleTheme: () => void;
 }
 
+interface ThemeProviderProps {
+  children: ReactNode;
+}
+
+// テーマをDOMとlocalStorageに反映する関数
+const setDocumentTheme = (theme: Theme) => {
+  if (theme === "dark") {
+    document.documentElement.classList.add("dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+  }
+  localStorage.setItem("theme", theme);
+};
+
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-const THEME_STORAGE_KEY = "theme";
+export const ThemeProvider = ({ children }: ThemeProviderProps) => {
+  const [theme, setTheme] = useState<Theme>("light");
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window === "undefined") return "light";
-    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) as Theme;
-    return savedTheme || "light";
-  });
-
+  // 初回マウント時にlocalStorageからテーマを取得
   useEffect(() => {
-    const root = document.documentElement;
-    root.classList.remove("light", "dark");
-    root.classList.add(theme);
-    localStorage.setItem(THEME_STORAGE_KEY, theme);
+    const storedTheme = localStorage.getItem("theme") as Theme | null;
+    if (storedTheme === "light" || storedTheme === "dark") {
+      setTheme(storedTheme);
+      setDocumentTheme(storedTheme);
+    } else {
+      setTheme("light");
+      setDocumentTheme("light");
+    }
+  }, []);
+
+  // テーマ変更時にDOMとlocalStorageを同期
+  useEffect(() => {
+    setDocumentTheme(theme);
   }, [theme]);
 
+  // テーマ切り替え関数
   const toggleTheme = useCallback(() => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   }, []);
 
-  const value = useMemo(
-    () => ({
-      theme,
-      toggleTheme,
-    }),
-    [theme, toggleTheme]
-  );
+  const value = useMemo(() => ({ theme, toggleTheme }), [theme, toggleTheme]);
 
   return (
     <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
-}
+};
 
-export function useTheme() {
+export const useTheme = () => {
   const context = useContext(ThemeContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;
-}
+};

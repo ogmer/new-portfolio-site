@@ -73,6 +73,16 @@ export default function Home() {
     setIsModalOpen(true);
   }, []);
 
+  const handleProjectKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>, project: Project) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        handleProjectClick(project);
+      }
+    },
+    [handleProjectClick]
+  );
+
   const handleModalClose = useCallback(() => {
     setIsModalOpen(false);
     setSelectedProject(null);
@@ -184,14 +194,11 @@ export default function Home() {
               boxShadow: "0 10px 30px -10px rgba(0,0,0,0.2)",
             }}
             className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onClick={() => handleProjectClick(project)}
             role="button"
             tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                handleProjectClick(project);
-              }
-            }}
+            aria-label={`プロジェクト: ${project.title}`}
+            onClick={() => handleProjectClick(project)}
+            onKeyDown={(e) => handleProjectKeyDown(e, project)}
           >
             <h2 className="text-xl font-semibold mb-2">{project.title}</h2>
             <p className="text-gray-600 dark:text-gray-300">

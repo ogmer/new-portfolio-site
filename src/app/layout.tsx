@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/context/ThemeContext";
 import SakuraAnimation from "@/components/SakuraAnimation";
 import JsonLd from "@/components/JsonLd";
+import React, { ReactNode } from "react";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -33,11 +34,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+// Props型を明示
+interface RootLayoutProps {
+  children: ReactNode;
+}
+
+const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
     <html lang="ja">
       <head>
@@ -51,4 +53,6 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

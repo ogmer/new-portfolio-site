@@ -1,7 +1,27 @@
 "use client";
 
-export default function JsonLd() {
-  const jsonLd = {
+import React from "react";
+
+// JSON-LDデータ型
+type JsonLdPerson = {
+  "@context": string;
+  "@type": string;
+  name: string;
+  jobTitle: string;
+  description: string;
+  knowsAbout: string[];
+  sameAs: string[];
+  email: string;
+  address: {
+    "@type": string;
+    addressLocality: string;
+    addressCountry: string;
+  };
+};
+
+// JSON-LDスクリプトを挿入するコンポーネント
+const JsonLd: React.FC = () => {
+  const jsonLd: JsonLdPerson = {
     "@context": "https://schema.org",
     "@type": "Person",
     name: "ogmer",
@@ -36,4 +56,6 @@ export default function JsonLd() {
       dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
     />
   );
-}
+};
+
+export default JsonLd;
