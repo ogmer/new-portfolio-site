@@ -1,33 +1,44 @@
 # Ogmer's Portfolio
 
-Next.js で構築されたモダンなポートフォリオサイトです。
+Astro で構築されたモダンなポートフォリオサイトです。
 
 ## 機能
 
 - ダークモード/ライトモードの切り替え
 - プロジェクト詳細のモーダル表示
 - アニメーション効果（Framer Motion）
+- 桜のアニメーション
+- レスポンシブデザイン
+- SEO 最適化
 
 ## 技術スタック
 
-- Next.js
+- Astro
+- React
 - TypeScript
 - Tailwind CSS
+- Framer Motion
 
-<br>
+## 開発
 
-# Ogmer's Portfolio
+```bash
+# 依存関係のインストール
+npm install
 
-A modern portfolio site built in Next.js.
+# 開発サーバーの起動
+npm run dev
 
-## Function
+# プロダクションビルド
+npm run build
 
-- Switching between dark and light modes
-- Modal display of project details
-- Animation effects (Framer Motion)
+# ビルド結果のプレビュー
+npm run preview
+```
 
-## Technology Stacks
+## デプロイ
 
-- Next.js
-- TypeScript
-- Tailwind CSS
+静的サイトとして生成されるため、Netlify、Vercel、GitHub Pages などの静的サイトホスティングサービスに簡単にデプロイできます。
+
+## ライセンス
+
+MIT License

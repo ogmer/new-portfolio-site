@@ -1,10 +1,6 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+export default {
+  content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
   darkMode: "class",
   theme: {
     extend: {
@@ -13,7 +9,7 @@ module.exports = {
         secondary: "#1a1a1a",
       },
       fontFamily: {
-        sans: ["var(--font-inter)"],
+        sans: ["Inter", "sans-serif"],
       },
     },
   },

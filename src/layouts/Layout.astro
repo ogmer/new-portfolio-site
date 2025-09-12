@@ -1,0 +1,72 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "バックエンド開発を本業とし、フロントエンド開発を趣味とするエンジニアのポートフォリオサイトです。" } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/sakura.webp" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="ogmer portfolio site" />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content="https://ogmer.netlify.app" />
+    <meta property="og:site_name" content="ogmer portfolio site" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ogmer portfolio site" />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "ogmer",
+        "description": "バックエンド開発を本業とし、フロントエンド開発を趣味とするエンジニア",
+        "url": "https://ogmer.netlify.app",
+        "sameAs": [
+          "https://github.com/ogmer",
+          "https://qiita.com/ogmer",
+          "https://zenn.dev/ogmer"
+        ],
+        "email": "ogmer.net@gmail.com",
+        "jobTitle": "Backend Developer",
+        "knowsAbout": ["Java", "C++", "Python", "JavaScript", "SQL"]
+      }
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --foreground-rgb: 0, 0, 0;
+    --background-rgb: 255, 255, 255;
+  }
+
+  .dark {
+    --foreground-rgb: 255, 255, 255;
+    --background-rgb: 17, 24, 39;
+  }
+
+  body {
+    color: rgb(var(--foreground-rgb));
+    background: rgb(var(--background-rgb));
+  }
+</style>

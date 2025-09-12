@@ -1,5 +1,3 @@
-"use client";
-
 import React, {
   createContext,
   useContext,
@@ -7,7 +5,6 @@ import React, {
   useState,
   useCallback,
   useMemo,
-  ReactNode,
 } from "react";
 
 type Theme = "light" | "dark";
@@ -18,7 +15,7 @@ interface ThemeContextType {
 }
 
 interface ThemeProviderProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 // テーマをDOMとlocalStorageに反映する関数
