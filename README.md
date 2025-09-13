@@ -18,7 +18,3 @@ Astro で構築されたモダンなポートフォリオサイトです。
 - TypeScript
 - Tailwind CSS
 - Framer Motion
-
-## ライセンス
-
-MIT License
